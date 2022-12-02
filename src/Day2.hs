@@ -21,14 +21,14 @@ win 'A' = 'B'
 win 'B' = 'C'
 win 'C' = 'A'
 
-roundOutcome :: Num a => (Char, Char) -> a
-roundOutcome (a, b)
+outcomeScore :: Num a => (Char, Char) -> a
+outcomeScore (a, b)
   | b == win a = 6 
   | b == a     = 3
   | otherwise  = 0
 
 roundScore :: Num a => (Char, Char) -> a
-roundScore (a, b) = score b + roundOutcome (a, b)
+roundScore (a, b) = score b + outcomeScore (a, b)
 
 parseInput :: ((Char, Char) -> b) -> [Char] -> [b]
 parseInput f = map (f . (\x -> (head x, last x))) . splitOn "\n" 
