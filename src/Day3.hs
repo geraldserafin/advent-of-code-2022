@@ -13,7 +13,7 @@ priority c
 halve :: [a] -> [[a]]
 halve xs = chunksOf (div (length xs) 2) xs
 
-solve :: ([String] -> [[[Char]]]) -> String -> Int
+solve :: Foldable t => ([String] -> [t String]) -> String -> Int
 solve f = sum . map (priority . head . foldr1 intersect) . f . lines  
 
 part1 :: String -> Int
