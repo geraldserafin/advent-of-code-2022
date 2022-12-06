@@ -1,12 +1,16 @@
 module Day1 (part2, part1) where
-import Data.List.Split (splitOn)
+
+import AOC (solve)
+import Parsers (number)
 import Data.List (sort)
+import Text.Parsec (Parsec, endOfLine, sepEndBy)
 
-parseInput :: [Char] -> [Int]
-parseInput s = map (sum . map read . splitOn "\n") $ splitOn "\n\n" s :: [Int]
+parser :: Parsec String () [[Int]]
+parser = number `sepEndBy` endOfLine `sepEndBy` endOfLine
 
-part1 :: [Char] -> Int
-part1 =  maximum . parseInput
+solution :: Show a => ([Int] -> a) -> FilePath -> IO ()
+solution f = solve (f . map sum) parser
 
-part2 :: [Char] -> Int
-part2 = sum . take 3 . reverse . sort . parseInput
+part1, part2 :: FilePath -> IO ()
+part1 = solution maximum 
+part2 = solution (sum . take 3 . reverse . sort)

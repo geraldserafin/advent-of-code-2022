@@ -1,5 +1,9 @@
 module Day2 (part1, part2) where
+  
+import AOC (solve)
+import Parsers (split)
 import Data.List.Split (splitOn)
+import Text.Parsec (letter, endOfLine, sepBy1, Parsec)
 
 translate :: Char -> Char
 translate 'X' = 'A'
@@ -30,11 +34,9 @@ outcomeScore (a, b)
 roundScore :: Num a => (Char, Char) -> a
 roundScore (a, b) = score b + outcomeScore (a, b)
 
-parseInput :: ((Char, Char) -> b) -> [Char] -> [b]
-parseInput f = map (f . (\x -> (head x, last x))) . splitOn "\n" 
+parser :: Parsec String () [(Char, Char)]
+parser = split " " letter `sepBy1` endOfLine
 
-part1 :: [Char] -> Integer
-part1 = sum . parseInput (\(a, b) -> roundScore (a, translate b))
-
-part2 :: [Char] -> Integer
-part2 = sum . parseInput (\(a, b) -> roundScore (a, translate' b a))
+part1, part2 :: FilePath -> IO ()
+part1 = solve (sum . map (\(a, b) -> roundScore (a, translate b))) parser
+part2 = solve (sum . map (\(a, b) -> roundScore (a, translate' b a))) parser

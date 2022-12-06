@@ -1,8 +1,13 @@
 module Day4 (part1, part2) where
-
-import Data.List.Split (splitOn)
+  
+import AOC (solve)
+import Parsers (split, number)
+import Text.Parsec (Parsec, endOfLine, sepBy1, many)
 
 type Range = (Int, Int)
+
+parser :: Parsec String () [(Range, Range)]
+parser = concat <$> many (split "," (split "-" number)) `sepBy1` endOfLine
 
 overlaps :: Range -> Range -> Bool
 overlaps (a,b) (c,d) = a <= d && b >= c
@@ -10,17 +15,9 @@ overlaps (a,b) (c,d) = a <= d && b >= c
 isSubrangeOf :: Range -> Range -> Bool
 isSubrangeOf (a,b) (c,d) = a >= c && b <= d
 
-parseInput :: String -> [(Range, Range)]
-parseInput = map (toPair . getRanges . splitOn ",") . lines 
-  where
-    toPair [x, y] = (x, y) 
-    getRanges = map (toPair . map read . splitOn "-")
+solution :: ((Range, Range) -> Bool) -> String -> IO ()
+solution f = solve (length . filter f) parser
 
-solve :: ((Range, Range) -> Bool) -> String -> Int
-solve f = length . filter f . parseInput 
-
-part1 :: String -> Int
-part1 = solve (\(a, b) -> a `isSubrangeOf` b || b `isSubrangeOf` a )
-
-part2 :: String -> Int
-part2 = solve (\(a, b) -> a `overlaps` b)
+part1, part2 :: String -> IO ()
+part1 = solution (\(a, b) -> a `isSubrangeOf` b || b `isSubrangeOf` a )
+part2 = solution (\(a, b) -> a `overlaps` b)

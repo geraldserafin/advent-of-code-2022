@@ -1,8 +1,13 @@
 module Day3 (part1, part2) where
 
+import AOC (solve)
 import Data.List (intersect)
-import Data.List.Split (chunksOf)
 import Data.Char (isLower, ord)
+import Data.List.Split (chunksOf)
+import Text.Parsec (letter, many, endOfLine, sepBy1, Parsec)
+
+parser :: Parsec String () [String]
+parser = (many letter)`sepBy1` endOfLine
 
 priority :: Char -> Int
 priority c
@@ -13,11 +18,9 @@ priority c
 halve :: [a] -> [[a]]
 halve xs = chunksOf (div (length xs) 2) xs
 
-solve :: Foldable t => ([String] -> [t String]) -> String -> Int
-solve f = sum . map (priority . head . foldr1 intersect) . f . lines  
+solution :: Foldable t => [t [Char]] -> Int
+solution = sum . map (priority . head . foldr1 intersect) 
 
-part1 :: String -> Int
-part1 = solve (map halve)
-
-part2 :: String -> Int
-part2 = solve (chunksOf 3) 
+part1, part2 :: FilePath -> IO ()
+part1 = solve (solution . map halve) parser
+part2 = solve (solution . chunksOf 3) parser
