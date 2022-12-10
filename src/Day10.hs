@@ -13,7 +13,7 @@ parser :: Parsec String () [Int]
 parser = map signal . words <$> many anyChar
 
 cycles :: [Int] -> [Int]
-cycles = scanl1 (+) . ([1]++) 
+cycles = scanl (+) 1 
 
 part1 :: String -> IO ()
 part1 = solve (sum . every 40 . drop 19 . zipWith (*) [1..] . cycles) parser
