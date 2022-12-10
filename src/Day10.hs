@@ -18,8 +18,7 @@ cycles = scanl1 (+) . ([1]++)
 part1 :: String -> IO ()
 part1 = solve (sum . every 40 . drop 19 . zipWith (*) [1..] . cycles) parser
   where 
-    every n [] = []
-    every n as = head as : (every n $ drop n as)
+    every n = map head . chunksOf n
 
 part2 :: String -> IO ()
 part2 = solveWrite (toString . pixels . cycles) parser
