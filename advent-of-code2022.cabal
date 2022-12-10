@@ -6,7 +6,8 @@ maintainer:         serafingerald@protonmail.com
 extra-source-files: CHANGELOG.md
 
 library
-    exposed-modules:  AOC, Parsers, Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8, Day9
+    exposed-modules:  AOC, Parsers, Day1, Day2, Day3, Day4, 
+                      Day5, Day6, Day7, Day8, Day9, Day10
     build-depends:    base ^>=4.16.1.0, split, MissingH, containers, parsec
     hs-source-dirs:   src
     default-language: Haskell2010
